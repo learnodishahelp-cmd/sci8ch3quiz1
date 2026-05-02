@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ସ୍ୱାସ୍ଥ୍ୟ - ଚୂଡ଼ାନ୍ତ ସମ୍ପଦ | NCERT ବିଜ୍ଞାନ ଅଧ୍ୟାୟ ୩</title>
+    <style>
+        :root {
+            --primary: #0d7c59;
+            --primary-light: #e8f5e9;
+            --secondary: #ff6b35;
+            --bg: #f0f4f0;
+            --card-bg: #ffffff;
+            --text: #1a3328;
+            --text-light: #4a6b5a;
+            --correct: #27ae60;
+            --wrong: #e74c3c;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: 0.3s ease;
+            --font-odia: 'Noto Sans Oriya', 'Arial Unicode MS', 'Lohit Odia', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-odia);
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 30%, #dcedc8 60%, #f1f8e9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background-attachment: fixed;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Floating health icons background */
+        body::before {
+            content: '💚 🍎 🥗 💪 🧘 🌿 💧 🫁 ❤️ 🧠';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            font-size: 80px;
+            letter-spacing: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            animation: floatBg 40s linear infinite;
+        }
+        @keyframes floatBg {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 580px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .header .icon {
+            font-size: 48px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-15px);
+            }
+            50% {
+                transform: translateY(0);
+            }
+            70% {
+                transform: translateY(-8px);
+            }
+        }
+        .header h1 {
+            font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+            color: var(--primary);
+            font-weight: 700;
+            margin: 4px 0;
+            line-height: 1.3;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Score Box */
+        .score-box {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            border: 2px solid #e0e8e0;
+            transition: var(--transition);
+        }
+        .score-item {
+            text-align: center;
+            flex: 1;
+            min-width: 60px;
+        }
+        .score-item .label {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .score-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .score-item.correct .value {
+            color: var(--correct);
+        }
+        .score-item.wrong .value {
+            color: var(--wrong);
+        }
+        .score-divider {
+            width: 1px;
+            height: 32px;
+            background: #dde5dd;
+            border-radius: 1px;
+        }
+        .progress-wrap {
+            width: 100%;
+            height: 6px;
+            background: #e0e8e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0d7c59, #27ae60);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* Quiz Card */
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 18px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e8efe8;
+            transition: var(--transition);
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+        .question-number {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 0;
+        }
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e8e0;
+            border-radius: 12px;
+            background: #fafcfa;
+            cursor: pointer;
+            font-family: var(--font-odia);
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: left;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-btn:hover {
+            border-color: #b8d4b8;
+            background: #f4faf4;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+        .option-btn:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        .option-btn .option-letter {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e8f0e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #eef9f2;
+            box-shadow: 0 0 0 3px rgba(13, 124, 89, 0.1);
+        }
+        .option-btn.selected .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.correct-answer {
+            border-color: var(--correct) !important;
+            background: #eafaf1 !important;
+            animation: correctPulse 0.6s ease;
+        }
+        .option-btn.correct-answer .option-letter {
+            background: var(--correct) !important;
+            color: #fff !important;
+        }
+        .option-btn.wrong-answer {
+            border-color: var(--wrong) !important;
+            background: #fdeaea !important;
+            animation: shake 0.5s ease;
+        }
+        .option-btn.wrong-answer .option-letter {
+            background: var(--wrong) !important;
+            color: #fff !important;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        @keyframes correctPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(39, 174, 96, 0);
+            }
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-6px);
+            }
+            40% {
+                transform: translateX(6px);
+            }
+            60% {
+                transform: translateX(-4px);
+            }
+            80% {
+                transform: translateX(4px);
+            }
+        }
+        .feedback-text {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            min-height: 22px;
+            transition: var(--transition);
+        }
+        .feedback-text.correct-fb {
+            color: var(--correct);
+        }
+        .feedback-text.wrong-fb {
+            color: var(--wrong);
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-family: var(--font-odia);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-align: center;
+            letter-spacing: 0.2px;
+        }
+        .btn-prev {
+            background: #e8f0e8;
+            color: var(--text);
+        }
+        .btn-prev:hover {
+            background: #d5e5d5;
+        }
+        .btn-next {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(13, 124, 89, 0.3);
+        }
+        .btn-next:hover {
+            background: #0a6a4a;
+            box-shadow: 0 6px 20px rgba(13, 124, 89, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-submit {
+            background: var(--secondary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(255, 107, 53, 0.3);
+            animation: gentlePulse 2s infinite;
+        }
+        .btn-submit:hover {
+            background: #e85d2a;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            transform: translateY(-2px);
+        }
+        @keyframes gentlePulse {
+            0%,
+            100% {
+                box-shadow: 0 4px 14px rgba(255, 107, 53, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 24px rgba(255, 107, 53, 0.55);
+            }
+        }
+        .nav-btn:active {
+            transform: scale(0.96);
+            transition: transform 0.1s ease;
+        }
+        .nav-btn:disabled {
+            opacity: 0.45;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        /* Results */
+        .results-container {
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .results-emoji {
+            font-size: 70px;
+            display: block;
+            animation: bounce 1.5s infinite;
+        }
+        .results-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        .results-grade {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .results-detail {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .btn-restart {
+            background: var(--primary);
+            color: #fff;
+            font-family: var(--font-odia);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 32px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(13, 124, 89, 0.35);
+            transition: var(--transition);
+        }
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(13, 124, 89, 0.45);
+        }
+        .btn-restart:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive */
+        @media (max-width: 420px) {
+            .quiz-card {
+                padding: 14px 10px 18px;
+            }
+            .question-text {
+                font-size: 0.95rem;
+            }
+            .option-btn {
+                padding: 11px 12px;
+                font-size: 0.88rem;
+                gap: 7px;
+            }
+            .option-btn .option-letter {
+                width: 28px;
+                height: 28px;
+                font-size: 0.78rem;
+            }
+            .nav-btn {
+                padding: 10px 10px;
+                font-size: 0.85rem;
+            }
+            .score-item .value {
+                font-size: 1.2rem;
+            }
+            .header h1 {
+                font-size: 1.15rem;
+            }
+            .header .icon {
+                font-size: 36px;
+            }
+        }
+        @media (max-width: 340px) {
+            .score-box {
+                padding: 10px 12px;
+                gap: 6px;
+            }
+            .score-divider {
+                height: 24px;
+            }
+            .option-btn {
+                padding: 10px 10px;
+                font-size: 0.8rem;
+            }
+            .question-text {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <span class="icon">💚</span>
+            <h1>ସ୍ୱାସ୍ଥ୍ୟ - ଚୂଡ଼ାନ୍ତ ସମ୍ପଦ</h1>
+            <p class="subtitle">NCERT ବିଜ୍ଞାନ · ଅଧ୍ୟାୟ ୩ · ୫୦ MCQ ପ୍ରଶ୍ନ</p>
+        </div>
+
+        <!-- Score Box -->
+        <div class="score-box" id="scoreBox">
+            <div class="score-item correct">
+                <div class="label">✅ ସଠିକ୍</div>
+                <div class="value" id="correctCount">0</div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-item wrong">
+                <div class="label">❌ ଭୁଲ୍</div>
+                <div class="value" id="wrongCount">0</div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-item">
+                <div class="label">📝 ବାକୀ</div>
+                <div class="value" id="remainingCount">50</div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Card -->
+        <div class="quiz-card" id="quizCard">
+            <span class="question-number" id="questionNumber">ପ୍ରଶ୍ନ ୧/୫୦</span>
+            <p class="question-text" id="questionText"></p>
+            <ul class="options-list" id="optionsList"></ul>
+            <p class="feedback-text" id="feedbackText"></p>
+            <div class="nav-buttons">
+                <button class="nav-btn btn-prev" id="btnPrev" onclick="prevQuestion()">◀ ପୂର୍ବବର୍ତ୍ତୀ</button>
+                <button class="nav-btn btn-next" id="btnNext" onclick="nextQuestion()">ପରବର୍ତ୍ତୀ ▶</button>
+                <button class="nav-btn btn-submit" id="btnSubmit" onclick="submitQuiz()" style="display:none;">📋 ଫଳାଫଳ ଦେଖନ୍ତୁ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ 50 MCQ Questions in Odia ============
+        const quizData = [{
+            q: "ସୁସ୍ଥ ରହିବା ପାଇଁ ଆମକୁ କେଉଁ ପ୍ରକାରର ଖାଦ୍ୟ ଖାଇବା ଉଚିତ?",
+            options: ["କେବଳ ଭାତ", "କେବଳ ମାଛ", "ସନ୍ତୁଳିତ ଖାଦ୍ୟ", "କେବଳ ମିଠା"],
+            correct: 2
+        }, {
+            q: "ଭିଟାମିନ୍ 'ଏ' ଅଭାବରୁ କେଉଁ ରୋଗ ହୁଏ?",
+            options: ["ବେରିବେରି", "ରାତ୍ରି ଅନ୍ଧତା", "ସ୍କର୍ଭି", "ରିକେଟ୍ସ"],
+            correct: 1
+        }, {
+            q: "ଭିଟାମିନ୍ 'ସି' କେଉଁ ଖାଦ୍ୟରେ ଅଧିକ ମିଳେ?",
+            options: ["ଭାତ", "ଲେମ୍ବୁ", "ଘିଅ", "ମାଂସ"],
+            correct: 1
+        }, {
+            q: "ଶରୀରର ହାଡ଼ ଓ ଦାନ୍ତ ମଜବୁତ୍ କରିବା ପାଇଁ କେଉଁ ଖଣିଜ ଦରକାର?",
+            options: ["ଲୌହ", "କ୍ୟାଲସିୟମ୍", "ସୋଡ଼ିୟମ୍", "ପୋଟାସିୟମ୍"],
+            correct: 1
+        }, {
+            q: "ଜଳ ଆମ ଶରୀର ପାଇଁ କାହିଁକି ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ?",
+            options: ["କେବଳ ଶୋଷ ମେଣ୍ଟାଇବା ପାଇଁ", "ସମସ୍ତ ଶାରୀରିକ କାର୍ଯ୍ୟ ପାଇଁ", "କେବଳ ଗାଧୋଇବା ପାଇଁ", "କେବଳ ରୋଷେଇ ପାଇଁ"],
+            correct: 1
+        }, {
+            q: "ପ୍ରୋଟିନ୍ ଅଭାବରୁ ଶିଶୁମାନଙ୍କଠାରେ କେଉଁ ରୋଗ ଦେଖାଯାଏ?",
+            options: ["ମାରାସମସ୍", "ସ୍ଥୂଳତା", "ଡାଇବେଟିସ୍", "ଉଚ୍ଚ ରକ୍ତଚାପ"],
+            correct: 0
+        }, {
+            q: "ସନ୍ତୁଳିତ ଖାଦ୍ୟରେ କେଉଁ ଉପାଦାନଗୁଡ଼ିକ ରହିବା ଦରକାର?",
+            options: ["କେବଳ କାର୍ବୋହାଇଡ୍ରେଟ୍", "ସମସ୍ତ ପୁଷ୍ଟିକର ଉପାଦାନ", "କେବଳ ଚର୍ବି", "କେବଳ ଭିଟାମିନ୍"],
+            correct: 1
+        }, {
+            q: "ଭିଟାମିନ୍ 'ଡି' ଶରୀରରେ କିପରି ତିଆରି ହୁଏ?",
+            options: ["ପାଣି ପିଇଲେ", "ସୂର୍ଯ୍ୟାଲୋକ ଲାଗିଲେ", "ଶୋଇଲେ", "ଦୌଡ଼ିଲେ"],
+            correct: 1
+        }, {
+            q: "ଆଇଓଡ଼ିନ୍ ଅଭାବରୁ କେଉଁ ରୋଗ ହୁଏ?",
+            options: ["ଗଏଟର (ଗଳଗଣ୍ଡ)", "ମଧୁମେହ", "କ୍ୟାନ୍ସର", "ଯକ୍ଷ୍ମା"],
+            correct: 0
+        }, {
+            q: "କେଉଁ ଖାଦ୍ୟରେ ଲୌହ (ଆଇରନ୍) ଅଧିକ ମିଳେ?",
+            options: ["ପାଳଙ୍ଗ ଶାଗ", "ଚିନି", "ତେଲ", "ଚାଉଳ"],
+            correct: 0
+        }, {
+            q: "ସଂକ୍ରାମକ ରୋଗ କାହାକୁ କୁହାଯାଏ?",
+            options: ["ଯାହା ଜୀବାଣୁ ଦ୍ୱାରା ବ୍ୟାପେ", "ଯାହା କେବଳ ବୟସ୍କଙ୍କୁ ହୁଏ", "ଯାହା ଔଷଧରେ ଭଲ ହୁଏନି", "ଯାହା କେବଳ ଶିଶୁଙ୍କୁ ହୁଏ"],
+            correct: 0
+        }, {
+            q: "ମ୍ୟାଲେରିଆ ରୋଗ କିପରି ବ୍ୟାପେ?",
+            options: ["ପାଣି ଦ୍ୱାରା", "ମଶା କାମୁଡ଼ିବା ଦ୍ୱାରା", "ବାୟୁ ଦ୍ୱାରା", "ସ୍ପର୍ଶ ଦ୍ୱାରା"],
+            correct: 1
+        }, {
+            q: "ଡେଙ୍ଗୁ ଜ୍ୱରର ମୁଖ୍ୟ ଲକ୍ଷଣ କ'ଣ?",
+            options: ["କାଶ", "ତୀବ୍ର ଜ୍ୱର ଓ ଶରୀର ଯନ୍ତ୍ରଣା", "ଛିଙ୍କ", "ପେଟ ଦରଜ"],
+            correct: 1
+        }, {
+            q: "ଟିକାକରଣ କାହିଁକି ଜରୁରୀ?",
+            options: ["କେବଳ ସରକାରୀ ନିୟମ ପାଇଁ", "ରୋଗ ପ୍ରତିରୋଧ ପାଇଁ", "କେବଳ ସ୍କୁଲ ପାଇଁ", "ଏହାର କୌଣସି ଉପଯୋଗିତା ନାହିଁ"],
+            correct: 1
+        }, {
+            q: "ପୋଲିଓ ଟିକା କେଉଁ ରୋଗରୁ ରକ୍ଷା କରେ?",
+            options: ["ଯକ୍ଷ୍ମା", "ପୋଲିଓମାଇଲାଇଟିସ୍", "ମିଳିମିଳା", "ଜଳବସନ୍ତ"],
+            correct: 1
+        }, {
+            q: "ବ୍ୟକ୍ତିଗତ ସ୍ୱଚ୍ଛତା କାହିଁକି ଜରୁରୀ?",
+            options: ["କେବଳ ସୁନ୍ଦର ଦେଖାଯିବା ପାଇଁ", "ରୋଗ ପ୍ରତିରୋଧ ଓ ସୁସ୍ଥ ରହିବା ପାଇଁ", "କେବଳ ଫ୍ୟାଶନ୍ ପାଇଁ", "କେବଳ ଅନ୍ୟମାନଙ୍କୁ ଖୁସି କରିବା ପାଇଁ"],
+            correct: 1
+        }, {
+            q: "ଖାଇବା ପୂର୍ବରୁ କ'ଣ କରିବା ଉଚିତ?",
+            options: ["କିଛି ନୁହେଁ", "ସାବୁନରେ ହାତ ଧୋଇବା", "କେବଳ ପାଣି ଛୁଆଁଇବା", "ଲୁଗା ପୋଛିବା"],
+            correct: 1
+        }, {
+            q: "ଦାନ୍ତ ଦିନକୁ କେତେଥର ଘଷିବା ଉଚିତ?",
+            options: ["ଥରେ", "ଦୁଇଥର", "ସପ୍ତାହକୁ ଥରେ", "ଆଦୌ ନୁହେଁ"],
+            correct: 1
+        }, {
+            q: "ସ୍ୱାସ୍ଥ୍ୟକର ଜୀବନଶୈଳୀ ପାଇଁ କେତେ ସମୟ ବ୍ୟାୟାମ କରିବା ଦରକାର?",
+            options: ["ଆଦୌ ନୁହେଁ", "ଦୈନିକ ଅତି କମରେ ୩୦ ମିନିଟ୍", "ମାସକୁ ଥରେ", "ବର୍ଷକୁ ଥରେ"],
+            correct: 1
+        }, {
+            q: "ମାନସିକ ସ୍ୱାସ୍ଥ୍ୟ କ'ଣ?",
+            options: ["କେବଳ ପାଗଳ ନ ହେବା", "ଭାବନାତ୍ମକ, ମାନସିକ ଓ ସାମାଜିକ ସୁସ୍ଥତା", "କେବଳ ପରୀକ୍ଷାରେ ଭଲ ନମ୍ବର ଆଣିବା", "କେବଳ ହସୁଥିବା"],
+            correct: 1
+        }, {
+            q: "ଯୋଗ ଓ ଧ୍ୟାନ କାହିଁକି ଲାଭଦାୟକ?",
+            options: ["କେବଳ ସମୟ ନଷ୍ଟ", "ଶାରୀରିକ ଓ ମାନସିକ ସ୍ୱାସ୍ଥ୍ୟ ପାଇଁ", "କେବଳ ମନୋରଞ୍ଜନ", "କେବଳ ଶୋଇବା ପାଇଁ"],
+            correct: 1
+        }, {
+            q: "ଭିଟାମିନ୍ 'ବି' କମ୍ପ୍ଲେକ୍ସ ଅଭାବରୁ କେଉଁ ରୋଗ ହୁଏ?",
+            options: ["ବେରିବେରି", "ରିକେଟ୍ସ", "ସ୍କର୍ଭି", "ରାତ୍ରି ଅନ୍ଧତା"],
+            correct: 0
+        }, {
+            q: "ଖାଦ୍ୟ ରଖିବା ପାଇଁ କେଉଁ ପଦ୍ଧତି ବ୍ୟବହୃତ ହୁଏ?",
+            options: ["ଫ୍ରିଜିଂ", "ସୂର୍ଯ୍ୟରେ ଶୁଖାଇବା", "ଡବାରେ ବନ୍ଦ କରିବା", "ଉପରୋକ୍ତ ସମସ୍ତ"],
+            correct: 3
+        }, {
+            q: "ପ୍ରୋଟିନ୍ କେଉଁ ଖାଦ୍ୟରେ ଅଧିକ ମିଳେ?",
+            options: ["ଚିନି", "ଡାଲି ଓ ଅଣ୍ଡା", "ତେଲ", "ଘିଅ"],
+            correct: 1
+        }, {
+            q: "ଫାଇବର (ଖାଦ୍ୟ ତନ୍ତୁ) କାହିଁକି ଦରକାର?",
+            options: ["ହଜମ ପ୍ରକ୍ରିୟା ପାଇଁ", "କେବଳ ସ୍ୱାଦ ପାଇଁ", "କେବଳ ରଙ୍ଗ ପାଇଁ", "ଆଦୌ ଦରକାର ନାହିଁ"],
+            correct: 0
+        }, {
+            q: "ସ୍ଥୂଳତା କ'ଣ?",
+            options: ["ଶରୀରରେ ଅତ୍ୟଧିକ ଚର୍ବି ଜମା ହେବା", "ବହୁତ ପତଳା ହେବା", "ସୁସ୍ଥ ଓଜନ", "କେବଳ ମାଂସପେଶୀ"],
+            correct: 0
+        }, {
+            q: "କେଉଁ ଅଭ୍ୟାସ ସ୍ୱାସ୍ଥ୍ୟ ପାଇଁ କ୍ଷତିକାରକ?",
+            options: ["ନିୟମିତ ବ୍ୟାୟାମ", "ଧୂମପାନ", "ସନ୍ତୁଳିତ ଖାଦ୍ୟ", "ପର୍ଯ୍ୟାପ୍ତ ନିଦ"],
+            correct: 1
+        }, {
+            q: "ଜଳବାହିତ ରୋଗ କେଉଁଟି?",
+            options: ["ଡାଇରିଆ", "ମଧୁମେହ", "ଉଚ୍ଚ ରକ୍ତଚାପ", "ଆଜ୍ମା"],
+            correct: 0
+        }, {
+            q: "ORP (ଓରାଲ ରିହାଇଡ୍ରେସନ) ଦ୍ରବଣ କେତେବେଳେ ଦିଆଯାଏ?",
+            options: ["କ୍ଷୁଧା ଲାଗିଲେ", "ଡାଇରିଆ ଓ ନିର୍ଜଳୀକରଣ ସମୟରେ", "ଶୋଇବା ପୂର୍ବରୁ", "ଖେଳିବା ପରେ"],
+            correct: 1
+        }, {
+            q: "ପ୍ରଥମ ଚିକିତ୍ସା (First Aid) କ'ଣ?",
+            options: ["ଡାକ୍ତରଙ୍କ ପାଖକୁ ନ ଯିବା", "ଜରୁରୀକାଳୀନ ପ୍ରାଥମିକ ଚିକିତ୍ସା", "କେବଳ ଔଷଧ ଖାଇବା", "କେବଳ ବିଶ୍ରାମ ନେବା"],
+            correct: 1
+        }, {
+            q: "କଟା ଘାଆ ହେଲେ ସର୍ବପ୍ରଥମେ କ'ଣ କରିବା ଉଚିତ?",
+            options: ["ମାଟି ଲଗାଇବା", "ପରିଷ୍କାର ପାଣିରେ ଧୋଇବା", "ତେଲ ଲଗାଇବା", "ଛାଡ଼ି ଦେବା"],
+            correct: 1
+        }, {
+            q: "ସ୍ୱାସ୍ଥ୍ୟର ସଂଜ୍ଞା WHO ଅନୁସାରେ କ'ଣ?",
+            options: ["କେବଳ ରୋଗମୁକ୍ତ", "ଶାରୀରିକ, ମାନସିକ ଓ ସାମାଜିକ ସୁସ୍ଥତା", "କେବଳ ଖୁସି ରହିବା", "କେବଳ ବ୍ୟାୟାମ"],
+            correct: 1
+        }, {
+            q: "ଭିଟାମିନ୍ 'କେ' ରକ୍ତ ଜମାଟ ବାନ୍ଧିବାରେ ସାହାଯ୍ୟ କରେ। ଏହା କେଉଁଥିରେ ମିଳେ?",
+            options: ["ସବୁଜ ପତ୍ରଯୁକ୍ତ ପନିପରିବା", "ଚିନି", "ଲୁଣ", "ପାଣି"],
+            correct: 0
+        }, {
+            q: "କାର୍ବୋହାଇଡ୍ରେଟ୍ ଶରୀରକୁ କ'ଣ ଯୋଗାଏ?",
+            options: ["ଶକ୍ତି", "ପାଣି", "ହାଡ଼", "ଚର୍ମ"],
+            correct: 0
+        }, {
+            q: "ଚିକେନପକ୍ସ (ଜଳବସନ୍ତ) କେଉଁ ଭୂତାଣୁ ଦ୍ୱାରା ହୁଏ?",
+            options: ["ଭେରିସେଲା ଜୋଷ୍ଟର", "ଏଚଆଇଭି", "ଇନ୍ଫ୍ଲୁଏଞ୍ଜା", "ରାଇନୋ ଭୂତାଣୁ"],
+            correct: 0
+        }, {
+            q: "ସନ୍ତୁଳିତ ଖାଦ୍ୟରେ ଫଳ ଓ ପନିପରିବା କାହିଁକି ରହିବା ଦରକାର?",
+            options: ["ଭିଟାମିନ୍ ଓ ଖଣିଜ ପାଇଁ", "କେବଳ ରଙ୍ଗ ପାଇଁ", "କେବଳ ପାଣି ପାଇଁ", "କେବଳ ସ୍ୱାଦ ପାଇଁ"],
+            correct: 0
+        }, {
+            q: "ମଧୁମେହ (Diabetes) କ'ଣ?",
+            options: ["ରକ୍ତରେ ଶର୍କରା ସ୍ତର ବୃଦ୍ଧି", "ରକ୍ତରେ ପାଣି ବୃଦ୍ଧି", "ହାଡ଼ ଦୁର୍ବଳତା", "ଚର୍ମ ରୋଗ"],
+            correct: 0
+        }, {
+            q: "ନିୟମିତ ହାତ ଧୋଇବା ଦ୍ୱାରା କେଉଁ ରୋଗରୁ ରକ୍ଷା ମିଳେ?",
+            options: ["ସଂକ୍ରାମକ ରୋଗ", "ବଂଶାନୁକ୍ରମିକ ରୋଗ", "ଜନ୍ମଗତ ରୋଗ", "ବୟସ ଜନିତ ରୋଗ"],
+            correct: 0
+        }, {
+            q: "ପ୍ରତିଦିନ କେତେ ଘଣ୍ଟା ନିଦ ନେବା ଉଚିତ?",
+            options: ["୨-୩ ଘଣ୍ଟା", "୭-୯ ଘଣ୍ଟା", "୧୨ ଘଣ୍ଟା", "୧ ଘଣ୍ଟା"],
+            correct: 1
+        }, {
+            q: "ଜଙ୍କ ଫୁଡ଼୍ (ଫାଷ୍ଟଫୁଡ୍) ଅଧିକ ଖାଇଲେ କ'ଣ ହୋଇପାରେ?",
+            options: ["ସ୍ଥୂଳତା ଓ ହୃଦରୋଗ", "ଅଧିକ ଶକ୍ତି", "ଉତ୍ତମ ସ୍ୱାସ୍ଥ୍ୟ", "ମଜବୁତ ହାଡ଼"],
+            correct: 0
+        }, {
+            q: "ଭିଟାମିନ୍ 'ଇ' କେଉଁ କାର୍ଯ୍ୟ ପାଇଁ ଜଣାଶୁଣା?",
+            options: ["ତ୍ୱଚା ଓ କେଶ ସୁରକ୍ଷା", "ହାଡ଼ ଗଠନ", "ଦୃଷ୍ଟି ଶକ୍ତି", "ରକ୍ତ ଜମାଟ"],
+            correct: 0
+        }, {
+            q: "HSFP (ସ୍ୱାସ୍ଥ୍ୟ ଓ ସ୍ୱଚ୍ଛତା ଶିକ୍ଷା) କାହିଁକି ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ?",
+            options: ["ସଚେତନତା ଓ ରୋଗ ନିରାକରଣ ପାଇଁ", "କେବଳ ପରୀକ୍ଷା ପାଇଁ", "କେବଳ ଚାକିରୀ ପାଇଁ", "ଏହାର କୌଣସି ମହତ୍ତ୍ୱ ନାହିଁ"],
+            correct: 0
+        }, {
+            q: "ଏକ ସୁସ୍ଥ ହୃଦୟ ପାଇଁ କେଉଁ ଖାଦ୍ୟ ଭଲ?",
+            options: ["ତେଲ ଓ ଘିଅ ଅଧିକ", "ଫଳ, ପନିପରିବା ଓ ପୂରା ଶସ୍ୟ", "କେବଳ ମିଠା", "କେବଳ ମାଂସ"],
+            correct: 1
+        }, {
+            q: "ପାଣି ପିଇବା ପାଇଁ ସୁରକ୍ଷିତ ଉତ୍ସ କେଉଁଟି?",
+            options: ["ନଦୀ ପାଣି", "ଫୁଟା ହୋଇଥିବା ପାଣି", "ପୋଖରୀ ପାଣି", "ବର୍ଷା ପାଣି ସିଧାସଳଖ"],
+            correct: 1
+        }, {
+            q: "ଭିଟାମିନ୍ 'ବି୧୨' ଅଭାବରୁ କ'ଣ ହୁଏ?",
+            options: ["ଆନିମିଆ (ରକ୍ତହୀନତା)", "ଦୃଷ୍ଟି ଶକ୍ତି ବୃଦ୍ଧି", "ହାଡ଼ ମଜବୁତ", "ଚର୍ମ ଚମକଦାର"],
+            correct: 0
+        }, {
+            q: "ଶାରୀରିକ କସରତ କରିବାର ଲାଭ କ'ଣ?",
+            options: ["କେବଳ ମାଂସପେଶୀ ବୃଦ୍ଧି", "ସାମଗ୍ରିକ ସ୍ୱାସ୍ଥ୍ୟ ଉନ୍ନତି", "କେବଳ ଓଜନ ହ୍ରାସ", "କେବଳ ନିଦ"],
+            correct: 1
+        }, {
+            q: "କୋଭିଡ-୧୯ କେଉଁ ପ୍ରକାର ରୋଗ?",
+            options: ["ଜୀବାଣୁ ଜନିତ", "ଭୂତାଣୁ ଜନିତ", "ଫଙ୍ଗସ ଜନିତ", "ପରଜୀବୀ ଜନିତ"],
+            correct: 1
+        }, {
+            q: "ସ୍ୱାସ୍ଥ୍ୟ ବୀମା କାହିଁକି ଉପଯୋଗୀ?",
+            options: ["ଚିକିତ୍ସା ଖର୍ଚ୍ଚ ସହାୟତା ପାଇଁ", "କେବଳ ଟିକସ ପାଇଁ", "କେବଳ ଦେଖାଇବା ପାଇଁ", "ଏହା ବେକାର"],
+            correct: 0
+        }, {
+            q: "ଖାଦ୍ୟ ପିରାମିଡ଼ କ'ଣ ଦର୍ଶାଏ?",
+            options: ["ଖାଦ୍ୟ ଗୋଷ୍ଠୀ ଓ ପରିମାଣ", "କେବଳ ମିଠାର ପରିମାଣ", "କେବଳ ପାଣି", "କେବଳ ବ୍ୟାୟାମ"],
+            correct: 0
+        }, {
+            q: "ଜୀବନର ସର୍ବଶ୍ରେଷ୍ଠ ଔଷଧ କ'ଣ?",
+            options: ["ଟଙ୍କା", "ପ୍ରତିରୋଧ ଓ ସ୍ୱଚ୍ଛତା", "ବିଳାସ", "ଅଳସ୍ୟ"],
+            correct: 1
+        }];
+
+        // ============ State ============
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let isSubmitted = false;
+
+        // ============ DOM Elements ============
+        const questionNumberEl = document.getElementById('questionNumber');
+        const questionTextEl = document.getElementById('questionText');
+        const optionsListEl = document.getElementById('optionsList');
+        const feedbackTextEl = document.getElementById('feedbackText');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const correctCountEl = document.getElementById('correctCount');
+        const wrongCountEl = document.getElementById('wrongCount');
+        const remainingCountEl = document.getElementById('remainingCount');
+        const progressFill = document.getElementById('progressFill');
+        const quizCard = document.getElementById('quizCard');
+
+        // ============ Functions ============
+        function updateScoreBox() {
+            let correct = 0;
+            let wrong = 0;
+            let answered = 0;
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] !== null) {
+                    answered++;
+                    if (userAnswers[i] === quizData[i].correct) {
+                        correct++;
+                    } else {
+                        wrong++;
+                    }
+                }
+            }
+            const remaining = quizData.length - answered;
+            correctCountEl.textContent = correct;
+            wrongCountEl.textContent = wrong;
+            remainingCountEl.textContent = remaining;
+            const progressPercent = Math.round((answered / quizData.length) * 100);
+            progressFill.style.width = progressPercent + '%';
+        }
+
+        function loadQuestion(index) {
+            if (isSubmitted) return;
+            const data = quizData[index];
+            questionNumberEl.textContent = 'ପ୍ରଶ୍ନ ' + (index + 1) + '/' + quizData.length;
+            questionTextEl.textContent = data.q;
+            optionsListEl.innerHTML = '';
+            feedbackTextEl.textContent = '';
+            feedbackTextEl.className = 'feedback-text';
+
+            const letters = ['କ', 'ଖ', 'ଗ', 'ଘ'];
+            const userAnswer = userAnswers[index];
+            const correctIdx = data.correct;
+
+            data.options.forEach((opt, i) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>' + opt;
+
+                // Apply saved state if already answered
+                if (userAnswer !== null) {
+                    btn.classList.add('disabled');
+                    if (i === correctIdx) {
+                        btn.classList.add('correct-answer');
+                    }
+                    if (i === userAnswer && userAnswer !== correctIdx) {
+                        btn.classList.add('wrong-answer');
+                    }
+                    if (i === userAnswer) {
+                        btn.classList.add('selected');
+                    }
+                } else {
+                    btn.addEventListener('click', () => selectAnswer(index, i));
+                }
+
+                li.appendChild(btn);
+                optionsListEl.appendChild(li);
+            });
+
+            // Show feedback text if already answered
+            if (userAnswer !== null) {
+                if (userAnswer === correctIdx) {
+                    feedbackTextEl.textContent = '✅ ସଠିକ୍!';
+                    feedbackTextEl.className = 'feedback-text correct-fb';
+                } else {
+                    feedbackTextEl.textContent = '❌ ଭୁଲ୍!';
+                    feedbackTextEl.className = 'feedback-text wrong-fb';
+                }
+            }
+
+            // Update nav buttons
+            btnPrev.disabled = (index === 0);
+            if (index === quizData.length - 1) {
+                btnNext.style.display = 'none';
+                btnSubmit.style.display = 'inline-block';
+            } else {
+                btnNext.style.display = 'inline-block';
+                btnSubmit.style.display = 'none';
+            }
+            updateScoreBox();
+        }
+
+        function selectAnswer(qIndex, optIndex) {
+            if (isSubmitted) return;
+            // Prevent changing answer after selection
+            if (userAnswers[qIndex] !== null) return;
+
+            // Save answer
+            userAnswers[qIndex] = optIndex;
+            const correctIdx = quizData[qIndex].correct;
+            const buttons = optionsListEl.querySelectorAll('.option-btn');
+
+            // Disable all buttons and apply correct/wrong styling
+            buttons.forEach((btn, i) => {
+                btn.classList.add('disabled');
+                btn.classList.remove('selected', 'correct-answer', 'wrong-answer');
+                if (i === correctIdx) {
+                    btn.classList.add('correct-answer');
+                }
+                if (i === optIndex && optIndex !== correctIdx) {
+                    btn.classList.add('wrong-answer');
+                }
+                if (i === optIndex) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            // Show immediate feedback message
+            if (optIndex === correctIdx) {
+                feedbackTextEl.textContent = '✅ ସଠିକ୍!';
+                feedbackTextEl.className = 'feedback-text correct-fb';
+            } else {
+                feedbackTextEl.textContent = '❌ ଭୁଲ୍!';
+                feedbackTextEl.className = 'feedback-text wrong-fb';
+            }
+
+            updateScoreBox();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                quizCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                quizCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function submitQuiz() {
+            if (isSubmitted) return;
+            const unanswered = userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(unanswered +
+                        ' ଟି ପ୍ରଶ୍ନର ଉତ୍ତର ଦିଆଯାଇନାହିଁ। ଆପଣ ନିଶ୍ଚିତ ଫଳାଫଳ ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?')) {
+                    return;
+                }
+            }
+            isSubmitted = true;
+            showResults();
+        }
+
+        function showResults() {
+            let correct = 0;
+            let wrong = 0;
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct) {
+                    correct++;
+                } else if (userAnswers[i] !== null) {
+                    wrong++;
+                }
+            }
+            const total = quizData.length;
+            const scorePercent = Math.round((correct / total) * 100);
+            const unanswered = total - correct - wrong;
+
+            let emoji, grade, detail;
+            if (scorePercent >= 90) {
+                emoji = '🏆';
+                grade = 'ଅତି ଉତ୍ତମ! (Excellent)';
+                detail = 'ଆପଣଙ୍କ ଜ୍ଞାନ ଅସାଧାରଣ! ସ୍ୱାସ୍ଥ୍ୟ ବିଷୟରେ ଆପଣ ବହୁତ ଜାଣନ୍ତି।';
+            } else if (scorePercent >= 75) {
+                emoji = '🌟';
+                grade = 'ବହୁତ ଭଲ! (Very Good)';
+                detail = 'ଆପଣ ସ୍ୱାସ୍ଥ୍ୟ ବିଷୟରେ ଭଲ ଜ୍ଞାନ ରଖନ୍ତି। ଆହୁରି ପଢ଼ନ୍ତୁ।';
+            } else if (scorePercent >= 60) {
+                emoji = '👍';
+                grade = 'ଭଲ! (Good)';
+                detail = 'ଆପଣ ଭଲ କରିଛନ୍ତି। କିଛି ବିଷୟରେ ଆହୁରି ପଢ଼ିବା ଦରକାର।';
+            } else if (scorePercent >= 40) {
+                emoji = '📚';
+                grade = 'ଅଧିକ ଅଭ୍ୟାସ ଦରକାର (Needs Practice)';
+                detail = 'ଦୟାକରି NCERT ବହି ପୁଣି ପଢ଼ନ୍ତୁ ଓ ଅଭ୍ୟାସ କରନ୍ତୁ।';
+            } else {
+                emoji = '💪';
+                grade = 'ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ (Try Again)';
+                detail = 'ନିରାଶ ହୁଅନ୍ତୁ ନାହିଁ! ପୁଣି ପଢ଼ି ଆସନ୍ତୁ ଓ ପୁନର୍ବାର ପ୍ରୟାସ କରନ୍ତୁ।';
+            }
+
+            quizCard.innerHTML = `
+            <div class="results-container">
+              <span class="results-emoji">${emoji}</span>
+              <div class="results-score">${correct}/${total}</div>
+              <div class="results-grade">${grade}</div>
+              <p class="results-detail">
+                ✅ ସଠିକ୍: <strong>${correct}</strong> | 
+                ❌ ଭୁଲ୍: <strong>${wrong}</strong> | 
+                ⏭️ ଛାଡ଼ିଥିବା: <strong>${unanswered}</strong><br>
+                📊 ଶତକଡ଼ା: <strong>${scorePercent}%</strong><br>
+                ${detail}
+              </p>
+              <button class="btn-restart" onclick="restartQuiz()">🔄 ପୁନର୍ବାର ଆରମ୍ଭ କରନ୍ତୁ</button>
+            </div>
+          `;
+
+            correctCountEl.textContent = correct;
+            wrongCountEl.textContent = wrong;
+            remainingCountEl.textContent = '0';
+            progressFill.style.width = '100%';
+            btnPrev.style.display = 'none';
+            btnNext.style.display = 'none';
+            btnSubmit.style.display = 'none';
+            questionNumberEl.textContent = '📋 ଫଳାଫଳ';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            isSubmitted = false;
+            correctCountEl.textContent = '0';
+            wrongCountEl.textContent = '0';
+            remainingCountEl.textContent = quizData.length;
+            progressFill.style.width = '0%';
+            feedbackTextEl.textContent = '';
+            feedbackTextEl.className = 'feedback-text';
+            btnPrev.style.display = 'inline-block';
+            btnNext.style.display = 'inline-block';
+            btnSubmit.style.display = 'none';
+            questionNumberEl.textContent = 'ପ୍ରଶ୍ନ ୧/' + quizData.length;
+            loadQuestion(0);
+            quizCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============ Keyboard Navigation ============
+        document.addEventListener('keydown', (e) => {
+            if (isSubmitted) return;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (currentQuestion < quizData.length - 1) {
+                    nextQuestion();
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentQuestion > 0) {
+                    prevQuestion();
+                }
+            } else if (e.key >= '1' && e.key <= '4') {
+                e.preventDefault();
+                // Only allow selection if not already answered
+                if (userAnswers[currentQuestion] === null) {
+                    const optIndex = parseInt(e.key) - 1;
+                    selectAnswer(currentQuestion, optIndex);
+                }
+            }
+        });
+
+        // ============ Swipe Support for Mobile ============
+        let touchStartX = 0;
+        let touchEndX = 0;
+        quizCard.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        quizCard.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            if (isSubmitted) return;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 60) {
+                if (diff > 0 && currentQuestion < quizData.length - 1) {
+                    nextQuestion();
+                } else if (diff < 0 && currentQuestion > 0) {
+                    prevQuestion();
+                }
+            }
+        }
+
+        // ============ Initialize ============
+        loadQuestion(0);
+        updateScoreBox();
+    </script>
+</body>
+</html>
